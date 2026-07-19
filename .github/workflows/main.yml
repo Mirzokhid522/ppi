@@ -25,15 +25,18 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install pandas matplotlib plotly
+        run: pip install pandas plotly
 
       - name: Generate chart
         run: python generate_final_chart.py
 
+      - name: Rename output for Pages
+        run: mv final_demand_chart.html index.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: 'index.html'
 
   deploy:
     needs: build
