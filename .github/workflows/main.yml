@@ -1,17 +1,9 @@
-name: Generate and Deploy Chart
+name: Deploy to GitHub Pages
 
 on:
   push:
-    paths:
-      - 'Final_Demand_Data.csv'
-      - 'generate_final_chart.py'
-      - '.github/workflows/main.yml'
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+    branches:
+      - main
 
 jobs:
   build:
@@ -28,13 +20,12 @@ jobs:
       - name: Install dependencies
         run: pip install pandas plotly
 
-      - name: Generate chart
+      - name: Run generation script
         run: python generate_final_chart.py
 
-      - name: Prepare artifact directory
+      - name: Prepare deployment directory
         run: |
-          rm -rf public
-          mkdir public
+          mkdir -p public
           cp final_demand_chart.html public/index.html
           ls -R public
 
@@ -46,10 +37,13 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
