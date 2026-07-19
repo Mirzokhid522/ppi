@@ -5,6 +5,7 @@ on:
     paths:
       - 'Final_Demand_Data.csv'
       - 'generate_final_chart.py'
+      - '.github/workflows/main.yml'
   workflow_dispatch:
 
 permissions:
@@ -32,8 +33,10 @@ jobs:
 
       - name: Prepare artifact directory
         run: |
+          rm -rf public
           mkdir public
           cp final_demand_chart.html public/index.html
+          ls -R public
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
