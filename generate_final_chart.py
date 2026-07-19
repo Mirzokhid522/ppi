@@ -1,6 +1,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import os
 
 # Load the dataset
 file_path = 'Final_Demand_Data.csv'
@@ -73,6 +74,9 @@ fig.update_layout(
     barmode='group'
 )
 
-# Save the interactive file
-fig.write_html("final_demand_chart.html")
-print("Interactive chart saved as final_demand_chart.html")
+# Ensure the directory exists and save the file directly
+if not os.path.exists('public'):
+    os.makedirs('public')
+
+fig.write_html("public/index.html")
+print("Interactive chart saved as public/index.html")
