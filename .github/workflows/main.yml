@@ -5,28 +5,35 @@ on:
     paths:
       - 'Final_Demand_Data.csv'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.x'
 
       - name: Install dependencies
-        run: pip install pandas plotly
+        run: |
+          pip install pandas plotly
 
-      - name: Run generation script
-        run: python generate_final_chart.py
+      - name: Generate chart
+        run: |
+          python generate_final_chart.py
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add final_demand_chart.html
-          git commit -m "Automated update: Final Demand chart"
+          git add .
+          git commit -m "Automated update: Final Demand chart" || echo "No changes to commit"
           git push
