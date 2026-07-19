@@ -1,13 +1,16 @@
-name: Generate Final Demand Chart
+name: Generate and Deploy Chart
 
 on:
   push:
     paths:
       - 'Final_Demand_Data.csv'
+      - 'generate_final_chart.py'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -22,19 +25,23 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: |
-          pip install pandas matplotlib plotly
+        run: pip install pandas matplotlib plotly
 
-      - name: Run script
-        run: |
-          python generate_final_chart.py
+      - name: Generate chart
+        run: python generate_final_chart.py
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          # Pull latest changes to avoid "fetch first" errors
-          git pull --rebase origin main
-          # Only commit/push if there are changes
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Automated update of charts" && git push)
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
