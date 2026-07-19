@@ -40,18 +40,36 @@ fig.add_trace(
     secondary_y=True,
 )
 
-# Layout adjustments for styling
+# Layout adjustments for dark theme
 fig.update_layout(
     title_text="Final Demand Data",
-    xaxis=dict(showgrid=False),
-    yaxis=dict(showgrid=True, gridcolor='lightgray', title='%'),
-    yaxis2=dict(showgrid=False, title='index number'),
+    title_font=dict(color='white'),
+    plot_bgcolor='black',
+    paper_bgcolor='black',
+    xaxis=dict(
+        showgrid=False,
+        tickfont=dict(color='white'),
+        title_font=dict(color='white')
+    ),
+    yaxis=dict(
+        showgrid=True, 
+        gridcolor='#333333', 
+        title='%',
+        tickfont=dict(color='white'),
+        title_font=dict(color='white')
+    ),
+    yaxis2=dict(
+        showgrid=False, 
+        title='index number',
+        tickfont=dict(color='white'),
+        title_font=dict(color='white')
+    ),
     legend=dict(
         orientation="h", 
         yanchor="top", y=-0.15, 
-        xanchor="center", x=0.5
+        xanchor="center", x=0.5,
+        font=dict(color='white')
     ),
-    plot_bgcolor='white',
     barmode='group'
 )
 
