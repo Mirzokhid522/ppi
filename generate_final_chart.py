@@ -74,7 +74,7 @@ fig.update_layout(
     barmode='group'
 )
 
-# Ensure the directory exists and save the file directly
+# Ensure the directory exists and save the file
 if not os.path.exists('public'):
     os.makedirs('public')
 
